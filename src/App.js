@@ -25,16 +25,17 @@ const colorPalette = {
   white: '#fff',
   offwhite: '#F4F5F6',
   lightGray: '#DFE3E8',
-  gray: '#EFEFEF',
+  gray: '#E7E7E7',
   darkGray: '#BBC0C6',
+
   veryDarkGray: '#585858',
   lightBlue: '#C8DAE5',
 
   green: '#8EC741',
   hotPink: '#FE387B',
   // #28A1F3
-  blue: '#93CAF0',
-  deepBlue: '#1F7DF1',
+  blue: '#95C6F3',
+  deepBlue: '#4291E3',
   lightYellow: '#E2E2D0',
 };
 
@@ -54,31 +55,40 @@ const Header = styled.div`
   border: 1px solid ${colorPalette.gray};
 `;
 
-const MenuOption = styled.div`
-  text-transform: uppercase;
-  font-size: 20px;
-  text-align: center;
-  font-weight: 600;
-  display: inline-block;
-  cursor: pointer;
-  margin: 8px;
+const MenuOptionContainer = styled.div`
+  align-items: center;
+  border-bottom: ${props =>
+    props.active ? `solid 6px ${colorPalette.deepBlue}` : 'none'};
   :after {
     display: block;
     content: '';
-    border-bottom: solid 3px #019fb6;
+    border-bottom: solid 3px ${colorPalette.lightBlue};
     transform: scaleX(0);
     transition: transform 250ms ease-in-out;
   }
   :before {
     display: block;
     content: '';
-    border-bottom: solid 3px #019fb6;
+    border-bottom: solid 3px ${colorPalette.lightBlue};
     transform: scaleX(0);
     transition: transform 250ms ease-in-out;
   }
   :hover:after {
-    transform: scaleX(1);
+    transform: ${props => (props.active ? 'scale(0)' : 'scaleX(1)')};
   }
+`;
+
+const MenuOption = styled.div`
+  color: ${props => (props.active ? `inherit` : `${colorPalette.darkGray}`)};
+  text-transform: uppercase;
+  font-size: 20px;
+  text-align: center;
+  letter-spacing: 1px;
+  font-weight: 500;
+  height: 100%;
+  display: inline-block;
+  cursor: pointer;
+  margin: 32px;
 `;
 
 const ContentContainer = styled.div`
@@ -89,16 +99,52 @@ const ContentContainer = styled.div`
 `;
 
 const OptionsToolbar = styled.div`
-  height: 64px;
+  height: 128px;
   display: flex;
-  justify-content: center;
+  width: 100%;
+  justify-content: flex-start;
   align-items: center;
+  margin: 0 32px 0px 32px;
+  border-bottom: 2px solid ${colorPalette.gray};
 `;
 
-const ChartTitleContainer = styled.div`
-  margin-top: 32px;
-  margin-bottom: 48px;
+const ToolbarOptionContainer = styled.div`
+  height: 100%;
+  display: flex;
+  align-items: center;
+  border-bottom: ${props =>
+    props.active ? `solid 3px ${colorPalette.blue}` : 'none'};
+  :after {
+    display: block;
+    content: '';
+    border-bottom: solid 3px ${colorPalette.lightBlue};
+    transform: scaleX(0);
+    transition: transform 250ms ease-in-out;
+  }
+  :before {
+    display: block;
+    content: '';
+    border-bottom: solid 3px ${colorPalette.lightBlue};
+    transform: scaleX(0);
+    transition: transform 250ms ease-in-out;
+  }
+  :hover:after {
+    transform: ${props => (props.active ? 'scale(0)' : 'scaleX(1)')};
+  }
 `;
+
+const ToolbarOption = styled.div`
+  color: ${props => (props.active ? `inherit` : `${colorPalette.darkGray}`)};
+  text-transform: uppercase;
+  font-size: 16px;
+  margin: 16px;
+  text-align: center;
+  font-weight: 500;
+  display: inline-block;
+  cursor: pointer;
+`;
+
+const ChartTitleContainer = styled.div`margin-bottom: 48px;`;
 
 const ChartTitle = styled.h1`
   text-align: center;
@@ -135,7 +181,11 @@ const ChartSummaryMainContainer = styled.div`
   margin-bottom: 16px;
 `;
 
-const ChartSummarySecondaryContainer = styled.div``;
+const ChartSummarySecondaryContainer = styled.div`
+  opacity: 0.9;
+  text-transform: uppercase;
+  color: ${colorPalette.darkGray};
+`;
 
 const ChartSummaryPrimaryNumber = styled.div`
   display: flex;
@@ -179,13 +229,28 @@ class App extends Component {
     return (
       <AppContainer>
         <Header>
-          <MenuOption>meow</MenuOption>
-          <MenuOption>test1</MenuOption>
-          <MenuOption>test2</MenuOption>
-          <MenuOption>test3</MenuOption>
+          <MenuOptionContainer active>
+            <MenuOption active>Scatterplot</MenuOption>
+          </MenuOptionContainer>
+          <MenuOptionContainer>
+            <MenuOption>Histogram</MenuOption>
+          </MenuOptionContainer>{' '}
+          <MenuOptionContainer>
+            <MenuOption>Line Chart</MenuOption>
+          </MenuOptionContainer>{' '}
         </Header>
         <ContentContainer>
-          <OptionsToolbar />
+          <OptionsToolbar>
+            <ToolbarOptionContainer active>
+              <ToolbarOption active>Last 30 Days</ToolbarOption>
+            </ToolbarOptionContainer>
+            <ToolbarOptionContainer>
+              <ToolbarOption>Last 7 days</ToolbarOption>
+            </ToolbarOptionContainer>
+            <ToolbarOptionContainer>
+              <ToolbarOption>Yesterday</ToolbarOption>
+            </ToolbarOptionContainer>
+          </OptionsToolbar>
           <ChartTitleContainer>
             <ChartTitle>Analytics Report</ChartTitle>
           </ChartTitleContainer>
@@ -276,6 +341,7 @@ class App extends Component {
             <XAxis title="Dates" />
             <YAxis title="Days" />
           </FlexibleXYPlot>
+          <Footer />
         </ContentContainer>
       </AppContainer>
     );
