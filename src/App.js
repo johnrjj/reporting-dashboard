@@ -1,9 +1,5 @@
 // @flow
-
 import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
-import testData from './data.json';
 import 'react-vis/dist/style.css';
 import {
   XYPlot,
@@ -19,6 +15,7 @@ import {
 } from 'react-vis';
 import styled from 'styled-components';
 import moment from 'moment';
+import testData from './data.json';
 
 const parsedData = testData.map(d => {
   const parsedData = moment(d.x);
@@ -27,7 +24,6 @@ const parsedData = testData.map(d => {
   return res;
 });
 
-// https://stackoverflow.com/questions/28623446/expand-bottom-border-on-hover
 const FlexibleXYPlot = makeHeightFlexible(makeWidthFlexible(XYPlot));
 
 const colorPalette = {
@@ -36,13 +32,10 @@ const colorPalette = {
   lightGray: '#DFE3E8',
   gray: '#E7E7E7',
   darkGray: '#BBC0C6',
-
   veryDarkGray: '#585858',
   lightBlue: '#C8DAE5',
-
   green: '#8EC741',
   hotPink: '#FE387B',
-  // #28A1F3
   blue: '#95C6F3',
   deepBlue: '#4291E3',
   lightYellow: '#E2E2D0',
@@ -227,9 +220,6 @@ const Footer = styled.div`
 const myData = [
   { x: 1, y: 10, size: 30 },
   { x: 1.7, y: 12, size: 10 },
-  { x: 15, y: 20, size: 5 },
-  { x: 15, y: 17, size: 5 },
-
   { x: 2, y: 5, size: 1 },
   { x: 3, y: 15, size: 12 },
   { x: 2.5, y: 7, size: 4 },
@@ -249,10 +239,10 @@ class App extends Component {
           </MenuOptionContainer>
           <MenuOptionContainer>
             <MenuOption>Histogram</MenuOption>
-          </MenuOptionContainer>{' '}
+          </MenuOptionContainer>
           <MenuOptionContainer>
             <MenuOption>Line Chart</MenuOption>
-          </MenuOptionContainer>{' '}
+          </MenuOptionContainer>
         </Header>
         <ContentContainer>
           <OptionsToolbar>
@@ -361,7 +351,6 @@ class App extends Component {
               />
               {this.state.value
                 ? <Hint
-                    xType={'time'}
                     value={{
                       ...this.state.value,
                       x: moment(this.state.value.x).format(),
