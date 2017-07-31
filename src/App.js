@@ -39,6 +39,7 @@ const colorPalette = {
   blue: '#95C6F3',
   deepBlue: '#4291E3',
   lightYellow: '#E2E2D0',
+  purple: '#9691F4',
 };
 
 const AppContainer = styled.div`
@@ -48,7 +49,7 @@ const AppContainer = styled.div`
 `;
 
 const Header = styled.div`
-  height: 92px;
+  height: 72px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -60,7 +61,7 @@ const Header = styled.div`
 const MenuOptionContainer = styled.div`
   align-items: center;
   border-bottom: ${props =>
-    props.active ? `solid 6px ${colorPalette.deepBlue}` : 'none'};
+    props.active ? `solid 2px ${colorPalette.deepBlue}` : 'none'};
   :after {
     display: block;
     content: '';
@@ -90,7 +91,7 @@ const MenuOption = styled.div`
   height: 100%;
   display: inline-block;
   cursor: pointer;
-  margin: 32px;
+  margin: 20px;
 `;
 
 const ContentContainer = styled.div`
@@ -101,9 +102,8 @@ const ContentContainer = styled.div`
 `;
 
 const OptionsToolbar = styled.div`
-  height: 92px;
+  height: 72px;
   display: flex;
-  width: 100%;
   justify-content: flex-start;
   align-items: center;
   margin: 0 32px 32px 32px;
@@ -146,7 +146,10 @@ const ToolbarOption = styled.div`
   cursor: pointer;
 `;
 
-const ChartTitleContainer = styled.div`margin-bottom: 48px;`;
+const ChartTitleContainer = styled.div`
+  margin-bottom: 32px;
+  margin-top: 32px;
+`;
 
 const ChartTitle = styled.div`
   text-align: center;
@@ -173,7 +176,12 @@ const ChartSummary = styled.div`
   padding: 16px 48px;
   width: 256px;
   border-bottom: 3px solid
-    ${props => (props.blue ? colorPalette.deepBlue : colorPalette.green)};
+    ${props =>
+      props.blue
+        ? colorPalette.deepBlue
+        : props.purple
+          ? colorPalette.purple
+          : props.pink ? colorPalette.hotPink : colorPalette.green};
 `;
 
 const ChartSummaryMainContainer = styled.div`
@@ -194,7 +202,12 @@ const ChartSummaryPrimaryNumber = styled.div`
   display: flex;
   font-size: 64px;
   font-weight: 300;
-  color: ${props => (props.blue ? colorPalette.deepBlue : colorPalette.green)};
+  color: ${props =>
+    props.blue
+      ? colorPalette.deepBlue
+      : props.purple
+        ? colorPalette.purple
+        : props.pink ? colorPalette.hotPink : colorPalette.green};
 `;
 
 const ChartSummaryPrimaryDescription = styled.div`
@@ -245,17 +258,6 @@ class App extends Component {
           </MenuOptionContainer>
         </Header>
         <ContentContainer>
-          <OptionsToolbar>
-            <ToolbarOptionContainer active>
-              <ToolbarOption active>Last 30 Days</ToolbarOption>
-            </ToolbarOptionContainer>
-            <ToolbarOptionContainer>
-              <ToolbarOption>Last 7 days</ToolbarOption>
-            </ToolbarOptionContainer>
-            <ToolbarOptionContainer>
-              <ToolbarOption>Yesterday</ToolbarOption>
-            </ToolbarOptionContainer>
-          </OptionsToolbar>
           <ChartTitleContainer>
             <ChartTitle>Cycle Time Report</ChartTitle>
           </ChartTitleContainer>
@@ -282,9 +284,9 @@ class App extends Component {
                 +14% since last week
               </ChartSummarySecondaryContainer>
             </ChartSummary>
-            <ChartSummary blue>
+            <ChartSummary pink>
               <ChartSummaryMainContainer>
-                <ChartSummaryPrimaryNumber blue>22</ChartSummaryPrimaryNumber>
+                <ChartSummaryPrimaryNumber pink>22</ChartSummaryPrimaryNumber>
                 <ChartSummaryPrimaryDescription>
                   Days remaining
                 </ChartSummaryPrimaryDescription>
@@ -342,7 +344,8 @@ class App extends Component {
                 animation={true}
                 style={{
                   strokeWidth: 0.5,
-                  opacity: 0.9,
+                  opacity: 1,
+                  zIndex: 2,
                 }}
                 color={'url(#customGradient)'}
                 onNearestXY={value =>
@@ -361,7 +364,17 @@ class App extends Component {
               <YAxis title="Days" />
             </FlexibleXYPlot>
           </ChartContainer>
-          <Footer />
+          <OptionsToolbar>
+            <ToolbarOptionContainer active>
+              <ToolbarOption active>Last 30 Days</ToolbarOption>
+            </ToolbarOptionContainer>
+            <ToolbarOptionContainer>
+              <ToolbarOption>Last 7 days</ToolbarOption>
+            </ToolbarOptionContainer>
+            <ToolbarOptionContainer>
+              <ToolbarOption>Yesterday</ToolbarOption>
+            </ToolbarOptionContainer>
+          </OptionsToolbar>
         </ContentContainer>
       </AppContainer>
     );
