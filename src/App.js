@@ -367,5 +367,4 @@ class App extends Component {
     );
   }
 }
-console.log(testData);
 export default App;
