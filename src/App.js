@@ -99,12 +99,12 @@ const ContentContainer = styled.div`
 `;
 
 const OptionsToolbar = styled.div`
-  height: 128px;
+  height: 92px;
   display: flex;
   width: 100%;
   justify-content: flex-start;
   align-items: center;
-  margin: 0 32px 0px 32px;
+  margin: 0 32px 32px 32px;
   border-bottom: 2px solid ${colorPalette.gray};
 `;
 
@@ -146,7 +146,7 @@ const ToolbarOption = styled.div`
 
 const ChartTitleContainer = styled.div`margin-bottom: 48px;`;
 
-const ChartTitle = styled.h1`
+const ChartTitle = styled.div`
   text-align: center;
   font-size: 48px;
   font-weight: 300;
@@ -157,7 +157,7 @@ const ChartSummariesContainer = styled.div`
   align-items: center;
   justify-content: center;
   flex-direction: row;
-  margin-bottom: 64px;
+  margin-bottom: 48px;
 `;
 
 const ChartSummary = styled.div`
@@ -202,6 +202,11 @@ const ChartSummaryPrimaryDescription = styled.div`
   clear: both;
   margin-left: 16px;
   word-wrap: break-word;
+`;
+
+const ChartContainer = styled.div`
+  margin: 0 32px;
+  flex: 1;
 `;
 
 const Footer = styled.div`
@@ -289,58 +294,64 @@ class App extends Component {
               </ChartSummarySecondaryContainer>
             </ChartSummary>
           </ChartSummariesContainer>
-          <FlexibleXYPlot
-            xDomain={[0, 20]}
-            yDomain={[0, 20]}
-            onMouseLeave={() => this.setState({ value: false })}
-          >
-            <GradientDefs>
-              <linearGradient id="CoolGradient" x1="0" x2="0" y1="0" y2="1">
-                <stop offset="0%" stopColor="red" stopOpacity={0.4} />
-                <stop offset="100%" stopColor="blue" stopOpacity={0.3} />
-              </linearGradient>
-              <linearGradient id="myGradient" gradientUnits="userSpaceOnUse">
-                <stop offset="10%" stopColor="#c6e48b" />
-                <stop offset="33%" stopColor="#7bc96f" />
-                <stop offset="66%" stopColor="#239a3b" />
-                <stop offset="90%" stopColor="#196127" />
-              </linearGradient>
-              <linearGradient
-                gradientUnits="userSpaceOnUse"
-                id="customGradient"
-                x1="50%"
-                y1="100%"
-                x2="50%"
-                y2="0%"
-              >
-                <stop offset="0%" stopColor="rgb(142,199,65)" stopOpacity="1" />
-                <stop
-                  offset="85%"
-                  stopColor="rgb(142,199,65)"
-                  stopOpacity="1"
-                />
-                <stop
-                  offset="100%"
-                  stopColor="rgb(254,56,123)"
-                  stopOpacity="1"
-                />
-              </linearGradient>
-            </GradientDefs>
+          <ChartContainer>
+            <FlexibleXYPlot
+              xDomain={[0, 20]}
+              yDomain={[0, 20]}
+              onMouseLeave={() => this.setState({ value: false })}
+            >
+              <GradientDefs>
+                <linearGradient id="CoolGradient" x1="0" x2="0" y1="0" y2="1">
+                  <stop offset="0%" stopColor="red" stopOpacity={0.4} />
+                  <stop offset="100%" stopColor="blue" stopOpacity={0.3} />
+                </linearGradient>
+                <linearGradient id="myGradient" gradientUnits="userSpaceOnUse">
+                  <stop offset="10%" stopColor="#c6e48b" />
+                  <stop offset="33%" stopColor="#7bc96f" />
+                  <stop offset="66%" stopColor="#239a3b" />
+                  <stop offset="90%" stopColor="#196127" />
+                </linearGradient>
+                <linearGradient
+                  gradientUnits="userSpaceOnUse"
+                  id="customGradient"
+                  x1="50%"
+                  y1="100%"
+                  x2="50%"
+                  y2="0%"
+                >
+                  <stop
+                    offset="0%"
+                    stopColor="rgb(142,199,65)"
+                    stopOpacity="1"
+                  />
+                  <stop
+                    offset="85%"
+                    stopColor="rgb(142,199,65)"
+                    stopOpacity="1"
+                  />
+                  <stop
+                    offset="100%"
+                    stopColor="rgb(254,56,123)"
+                    stopOpacity="1"
+                  />
+                </linearGradient>
+              </GradientDefs>
 
-            <HorizontalGridLines />
+              <HorizontalGridLines />
 
-            <MarkSeries
-              animation={true}
-              color={'url(#customGradient)'}
-              className="mark-series-example"
-              sizeRange={[5, 15]}
-              onNearestXY={value => this.setState({ value })}
-              data={myData}
-            />
-            {this.state.value ? <Hint value={this.state.value} /> : null}
-            <XAxis title="Dates" />
-            <YAxis title="Days" />
-          </FlexibleXYPlot>
+              <MarkSeries
+                animation={true}
+                color={'url(#customGradient)'}
+                className="mark-series-example"
+                sizeRange={[5, 15]}
+                onNearestXY={value => this.setState({ value })}
+                data={myData}
+              />
+              {this.state.value ? <Hint value={this.state.value} /> : null}
+              <XAxis title="Dates" />
+              <YAxis title="Days" />
+            </FlexibleXYPlot>
+          </ChartContainer>
           <Footer />
         </ContentContainer>
       </AppContainer>
