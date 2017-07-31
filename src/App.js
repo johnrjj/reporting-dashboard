@@ -3,6 +3,7 @@
 import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
+import testData from './data.json';
 import 'react-vis/dist/style.css';
 import {
   XYPlot,
@@ -17,6 +18,14 @@ import {
   LineSeries,
 } from 'react-vis';
 import styled from 'styled-components';
+import moment from 'moment';
+
+const parsedData = testData.map(d => {
+  const parsedData = moment(d.x);
+  const date = parsedData.toDate();
+  const res = { ...d, x: date, size: 0.5 };
+  return res;
+});
 
 // https://stackoverflow.com/questions/28623446/expand-bottom-border-on-hover
 const FlexibleXYPlot = makeHeightFlexible(makeWidthFlexible(XYPlot));
@@ -170,7 +179,8 @@ const ChartSummary = styled.div`
   height: 128px;
   padding: 16px 48px;
   width: 256px;
-  border-bottom: 3px solid ${colorPalette.green};
+  border-bottom: 3px solid
+    ${props => (props.blue ? colorPalette.deepBlue : colorPalette.green)};
 `;
 
 const ChartSummaryMainContainer = styled.div`
@@ -191,7 +201,7 @@ const ChartSummaryPrimaryNumber = styled.div`
   display: flex;
   font-size: 64px;
   font-weight: 300;
-  color: ${colorPalette.green};
+  color: ${props => (props.blue ? colorPalette.deepBlue : colorPalette.green)};
 `;
 
 const ChartSummaryPrimaryDescription = styled.div`
@@ -257,14 +267,14 @@ class App extends Component {
             </ToolbarOptionContainer>
           </OptionsToolbar>
           <ChartTitleContainer>
-            <ChartTitle>Analytics Report</ChartTitle>
+            <ChartTitle>Cycle Time Report</ChartTitle>
           </ChartTitleContainer>
           <ChartSummariesContainer>
-            <ChartSummary>
+            <ChartSummary blue>
               <ChartSummaryMainContainer>
-                <ChartSummaryPrimaryNumber>67</ChartSummaryPrimaryNumber>
+                <ChartSummaryPrimaryNumber blue>305</ChartSummaryPrimaryNumber>
                 <ChartSummaryPrimaryDescription>
-                  People Enrolled
+                  Items Completed
                 </ChartSummaryPrimaryDescription>
               </ChartSummaryMainContainer>
               <ChartSummarySecondaryContainer>
@@ -273,20 +283,20 @@ class App extends Component {
             </ChartSummary>
             <ChartSummary>
               <ChartSummaryMainContainer>
-                <ChartSummaryPrimaryNumber>51%</ChartSummaryPrimaryNumber>
+                <ChartSummaryPrimaryNumber>16</ChartSummaryPrimaryNumber>
                 <ChartSummaryPrimaryDescription>
-                  Completion Performed
+                  Day Cycletime
                 </ChartSummaryPrimaryDescription>
               </ChartSummaryMainContainer>
               <ChartSummarySecondaryContainer>
                 +14% since last week
               </ChartSummarySecondaryContainer>
             </ChartSummary>
-            <ChartSummary>
+            <ChartSummary blue>
               <ChartSummaryMainContainer>
-                <ChartSummaryPrimaryNumber>33%</ChartSummaryPrimaryNumber>
+                <ChartSummaryPrimaryNumber blue>22</ChartSummaryPrimaryNumber>
                 <ChartSummaryPrimaryDescription>
-                  Issues Reported
+                  Days remaining
                 </ChartSummaryPrimaryDescription>
               </ChartSummaryMainContainer>
               <ChartSummarySecondaryContainer>
@@ -296,8 +306,7 @@ class App extends Component {
           </ChartSummariesContainer>
           <ChartContainer>
             <FlexibleXYPlot
-              xDomain={[0, 20]}
-              yDomain={[0, 20]}
+              xType={'time'}
               onMouseLeave={() => this.setState({ value: false })}
             >
               <GradientDefs>
@@ -321,17 +330,17 @@ class App extends Component {
                 >
                   <stop
                     offset="0%"
-                    stopColor="rgb(142,199,65)"
+                    stopColor={colorPalette.blue}
                     stopOpacity="1"
                   />
                   <stop
                     offset="85%"
-                    stopColor="rgb(142,199,65)"
+                    stopColor={'rgb(142,199,65)'}
                     stopOpacity="1"
                   />
                   <stop
                     offset="100%"
-                    stopColor="rgb(254,56,123)"
+                    stopColor={'rgb(254,56,123)'}
                     stopOpacity="1"
                   />
                 </linearGradient>
@@ -341,13 +350,24 @@ class App extends Component {
 
               <MarkSeries
                 animation={true}
+                style={{
+                  strokeWidth: 0.5,
+                  opacity: 0.9,
+                }}
                 color={'url(#customGradient)'}
-                className="mark-series-example"
-                sizeRange={[5, 15]}
-                onNearestXY={value => this.setState({ value })}
-                data={myData}
+                onNearestXY={value =>
+                  console.log(value) || this.setState({ value })}
+                data={parsedData}
               />
-              {this.state.value ? <Hint value={this.state.value} /> : null}
+              {this.state.value
+                ? <Hint
+                    xType={'time'}
+                    value={{
+                      ...this.state.value,
+                      x: moment(this.state.value.x).format(),
+                    }}
+                  />
+                : null}
               <XAxis title="Dates" />
               <YAxis title="Days" />
             </FlexibleXYPlot>
@@ -358,5 +378,5 @@ class App extends Component {
     );
   }
 }
-
+console.log(testData);
 export default App;
